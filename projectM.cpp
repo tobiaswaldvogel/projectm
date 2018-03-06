@@ -781,7 +781,7 @@ void projectM::selectNext(const bool hardCut) {
  * 
  * @param targetPreset 
  */
-void projectM::switchPreset(std::auto_ptr<Preset> & targetPreset) {
+void projectM::switchPreset(std::unique_ptr<Preset> & targetPreset) {
 
 	#ifdef SYNC_PRESET_SWITCHES	
 	pthread_mutex_lock(&preset_mutex);	
