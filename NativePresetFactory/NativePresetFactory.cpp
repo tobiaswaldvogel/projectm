@@ -108,7 +108,7 @@ std::unique_ptr<Preset> NativePresetFactory::allocate
 	PresetLibrary * library;
 	
 	if ((library = loadLibrary(url)) == 0)
-		return std::unique_ptr<Preset>(0);
+		return std::unique_ptr<Preset>(nullptr);
 	
 	return std::unique_ptr<Preset>(new LibraryPreset
 		(library->createFunctor()(url.c_str()), library->destroyFunctor()));

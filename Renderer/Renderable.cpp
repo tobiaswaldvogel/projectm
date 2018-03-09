@@ -1,6 +1,4 @@
-
-
-#ifdef USE_GLES1
+#ifdef USE_GLES2
 #include <GLES/gl.h>
 #else
 #ifdef __APPLE__
@@ -273,7 +271,7 @@ void MotionVectors::Draw(RenderContext &context)
 	{
 		for(int y=0;y<(int)y_num;y++)
 		{
-			float lx, ly, lz;
+			float lx, ly;
 			lx = x_offset+x*intervalx;
 			ly = y_offset+y*intervaly;
 
@@ -319,10 +317,14 @@ void Border::Draw(RenderContext &context)
 
 	glColor4f(inner_r, inner_g, inner_b, inner_a * masterAlpha);
 
+#ifndef USE_GLES2
 	glRectd(of, of, of+iff, texof);
 	glRectd(of+iff, of, texof-iff, of+iff);
 	glRectd(texof-iff, of, texof, texof);
 	glRectd(of+iff, texof, texof-iff, texof-iff);
+#else
+//TODO GLES2
+#endif
 
 	float pointsE[4][2] = {{of,of},{of,texof},{of+iff,of},{of+iff,texof}};
 	glVertexPointer(2,GL_FLOAT,0,pointsE);

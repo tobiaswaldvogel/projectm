@@ -49,7 +49,7 @@
 #endif /** WIN32 */
 
 #ifdef LINUX
-#ifdef USE_GLES1
+#ifdef USE_GLES2
 #include <GLES/gl.h>
 #else
 #include <GL/gl.h>

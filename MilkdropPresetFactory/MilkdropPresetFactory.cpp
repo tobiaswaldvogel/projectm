@@ -204,7 +204,7 @@ PresetOutputs* MilkdropPresetFactory::createPresetOutputs(int gx, int gy)
 
 	/* Q AND T VARIABLES START */
 
-	for (int i = 0;i<NUM_Q_VARIABLES;i++)
+	for (size_t i = 0; i < NUM_Q_VARIABLES; i++)
 		presetOutputs->q[i] = 0;
 	
 	/* Q AND T VARIABLES END */

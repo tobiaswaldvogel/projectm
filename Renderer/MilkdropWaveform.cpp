@@ -7,7 +7,11 @@
 #include <iostream>
 
 #ifdef LINUX
+#ifdef USE_GLES2
+#include <GLES/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 #endif
 #ifdef WIN32
 #include "glew.h"
@@ -36,7 +40,7 @@ void MilkdropWaveform::Draw(RenderContext &context)
 		else temp_a = a;
 		MaximizeColors(context);
 
-	#ifndef USE_GLES1
+	#ifndef USE_GLES2
 		if(dots==1) glEnable(GL_LINE_STIPPLE);
 	#endif
 
@@ -76,7 +80,7 @@ void MilkdropWaveform::Draw(RenderContext &context)
 		  }
 
 
-	#ifndef USE_GLES1
+	#ifndef USE_GLES2
 		if(dots==1) glDisable(GL_LINE_STIPPLE);
 	#endif
 

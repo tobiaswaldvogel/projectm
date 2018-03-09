@@ -25,7 +25,11 @@
  */
 
 #include <stdio.h>
-//#include <GL/gl.h>
+#ifdef USE_GLES2
+#include <GLES/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 #include <iostream>
 #include "Common.hpp"
 #include "FBO.hpp"

@@ -407,7 +407,7 @@ static void *thread_callback(void *prjm) {
             if ( timeKeeper->IsSmoothing() && timeKeeper->SmoothRatio() > 1.0 )
             {
                 //printf("End Smooth\n");
-                m_activePreset = m_activePreset2;
+                m_activePreset = std::move(m_activePreset2);
                 timeKeeper->EndSmoothing();
             }
             //printf("Normal\n");

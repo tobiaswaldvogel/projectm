@@ -16,20 +16,19 @@ INCLUDE(CPack)
 cmake_minimum_required(VERSION 2.4.0)
 
 
-cmake_policy(SET CMP0005 OLD)
+#cmake_policy(SET CMP0005 OLD)
 
 ADD_DEFINITIONS(-fPIC)
 
-set( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}
-                          ${CMAKE_CURRENT_SOURCE_DIR}/cmake )
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+#set( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}
+#                          ${CMAKE_CURRENT_SOURCE_DIR}/cmake )
 
 OPTION (USE_DEVIL "Use devIL for image loading rather than the builtin SOIL library" OFF)
 
 OPTION (USE_FBO "Use Framebuffer Objects for increased rendering quality.  Disable this for OpenGL ES 1.x or if you are experiencing problems on older or poorly supported hardware." ON)
 
 OPTION(USE_FTGL "Use FTGL for on-screen fonts (found on your system)" ON)
-
-OPTION (USE_GLES1 "Use OpenGL ES 1.x" OFF)
 
 OPTION (USE_OPENMP "Use OpenMP and OMPTL for multi-core paralellization" ON)
 
@@ -45,6 +44,16 @@ OPTION (DISABLE_NATIVE_PRESETS "Turn off support for native (C++ style) presets"
 OPTION (DISABLE_MILKDROP_PRESETS "Turn off support for Milkdrop (.milk / .prjm) presets"  OFF)
 
 ADD_DEFINITIONS(-DCMAKE_INSTALL_PREFIX="\\\"${CMAKE_INSTALL_PREFIX}\\\"")
+
+find_package(OpenGLES2)
+if (OPENGLES2_FOUND)
+ADD_DEFINITIONS(-DUSE_GLES2)
+SET(USE_FBO OFF)
+SET(OPENGL_LIBRARIES ${OPENGLES2_LIBRARY} ${EGL_LIBRARY})
+else (OPENGLES2_FOUND)
+FIND_PACKAGE(OpenGL)
+endif(OPENGLES2_FOUND)
+
 
 if (USE_NATIVE_GLEW)
 ADD_DEFINITIONS(-DUSE_NATIVE_GLEW)
@@ -93,11 +102,6 @@ else (USE_CG)
 SET (CG_LINK_TARGETS)
 endif(USE_CG)
 
-
-if(USE_GLES1)
-ADD_DEFINITIONS(-DUSE_GLES1)
-endif(USE_GLES1)
-
 if(USE_FBO)
 ADD_DEFINITIONS(-DUSE_FBO)
 endif(USE_FBO)
@@ -130,8 +134,6 @@ endif(WIN32)
 endif(APPLE)
 
 add_subdirectory(Renderer)
-
-FIND_PACKAGE(OpenGL)
 
 INCLUDE(FindPkgConfig.cmake)
 
@@ -177,9 +179,7 @@ message(STATUS "OPENGL_LIBRARIES: ${OPENGL_LIBRARIES}")
 message(STATUS "OPENGL_LIBRARIES: ${OPENGL_LIBRARIES}")
 	TARGET_LINK_LIBRARIES(projectM Renderer ${PRESET_FACTORY_LINK_TARGETS} ${GLEW_LINK_TARGETS} m ${FTGL_LINK_LIBS} ${OPENGL_LIBRARIES}  ${IMAGE_LINK_TARGETS} ${CG_LINK_TARGETS})
 else(BUILD_PROJECTM_STATIC)
-
 	TARGET_LINK_LIBRARIES(projectM Renderer ${PRESET_FACTORY_LINK_TARGETS} ${GLEW_LINK_TARGETS} m dl ${FTGL_LINK_LIBS} ${OPENGL_LIBRARIES}  ${IMAGE_LINK_TARGETS} ${CG_LINK_TARGETS})
-
 endif(BUILD_PROJECTM_STATIC)
 
 

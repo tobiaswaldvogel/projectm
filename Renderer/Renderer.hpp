@@ -6,7 +6,7 @@
 #include <string>
 #include <set>
 
-#ifdef USE_GLES1
+#ifdef USE_GLES2
 #include <GLES/gl.h>
 #else
 #ifdef __APPLE__
@@ -97,19 +97,18 @@ private:
 #ifdef USE_CG
   ShaderEngine shaderEngine;
 #endif
-  std::string m_presetName;
+	std::string m_presetName;
 
-  float* p;
+	float* p;
 
+	int vw;
+	int vh;
 
-  int vw;
-  int vh;
+	float aspect;
 
-  float aspect;
-
-  std::string title_fontURL;
-  std::string menu_fontURL;
-  std::string presetURL;
+	std::string title_fontURL;
+	std::string menu_fontURL;
+	std::string presetURL;
 
 #ifdef USE_FTGL
   FTGLPixmapFont *title_font;

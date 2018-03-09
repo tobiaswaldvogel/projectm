@@ -6,7 +6,11 @@
  */
 
 #ifdef LINUX
+#ifdef USE_GLES2
+#include <GLES/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 #endif
 #ifdef WIN32
 #include "glew.h"
@@ -103,7 +107,7 @@ void Waveform::Draw(RenderContext &context)
 
 			glPointSize(context.texsize < 512 ? 1 : context.texsize/512);
 			glLineWidth(context.texsize < 512 ? 1 : context.texsize/512);
-#ifndef USE_GLES1
+#ifndef USE_GLES2
 			glDisable(GL_LINE_STIPPLE);
 #endif
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

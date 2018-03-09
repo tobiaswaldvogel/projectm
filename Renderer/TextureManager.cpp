@@ -1,5 +1,9 @@
 #ifdef LINUX
+#ifdef USE_GLES2
+#include <GLES/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 #endif
 #ifdef WIN32
 #include "glew.h"

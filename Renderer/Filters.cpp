@@ -5,7 +5,7 @@
  *      Author: pete
  */
 
-#ifdef USE_GLES1
+#ifdef USE_GLES2
 #include <GLES/gl.h>
 #else
 #ifdef __APPLE__

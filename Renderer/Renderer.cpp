@@ -15,12 +15,10 @@ class Preset;
 
 Renderer::Renderer(int width, int height, int gx, int gy, int texsize, BeatDetect *beatDetect, std::string _presetURL,
 		std::string _titlefontURL, std::string _menufontURL) :
-	title_fontURL(_titlefontURL), menu_fontURL(_menufontURL), presetURL(_presetURL), m_presetName("None"), vw(width),
-			vh(height), texsize(texsize), mesh(gx, gy)
+	texsize(texsize), mesh(gx, gy),  
+	m_presetName("None"), vw(width), vh(height),
+	title_fontURL(_titlefontURL), menu_fontURL(_menufontURL), presetURL(_presetURL) 
 {
-	int x;
-	int y;
-
 	this->totalframes = 1;
 	this->noSwitch = false;
 	this->showfps = false;
@@ -30,7 +28,6 @@ Renderer::Renderer(int width, int height, int gx, int gy, int texsize, BeatDetec
 	this->showstats = false;
 	this->studio = false;
 	this->realfps = 0;
-
 	this->drawtitle = 0;
 
 	//this->title = "Unknown";
@@ -41,7 +38,7 @@ Renderer::Renderer(int width, int height, int gx, int gy, int texsize, BeatDetec
 
 	/// @bug put these on member init list
 	this->renderTarget = new RenderTarget(texsize, width, height);
-	this->textureManager = new TextureManager(presetURL);
+	this->textureManager = new TextureManager(_presetURL);
 	this->beatDetect = beatDetect;
 
 #ifdef USE_FTGL
@@ -59,7 +56,6 @@ Renderer::Renderer(int width, int height, int gx, int gy, int texsize, BeatDetec
 	poly_font->FaceSize(72);
 
 	poly_font->UseDisplayList(true);
-
 #endif /** USE_FTGL */
 
 
@@ -137,7 +133,7 @@ void Renderer::SetupPass1(const Pipeline &pipeline, const PipelineContext &pipel
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-#ifdef USE_GLES1
+#ifdef USE_GLES2
 	glOrthof(0.0, 1, 0.0, 1, -40, 40);
 #else
 	glOrtho(0.0, 1, 0.0, 1, -40, 40);
@@ -206,7 +202,7 @@ void Renderer::Pass2(const Pipeline &pipeline, const PipelineContext &pipelineCo
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-#ifdef USE_GLES1
+#ifdef USE_GLES2
 	glOrthof(-0.5, 0.5, -0.5, 0.5, -40, 40);
 #else
 	glOrtho(-0.5, 0.5, -0.5, 0.5, -40, 40);
@@ -270,7 +266,7 @@ void Renderer::Interpolation(const Pipeline &pipeline)
 	//Texture wrapping( clamp vs. wrap)
 	if (pipeline.textureWrap == 0)
 	{
-#ifdef USE_GLES1
+#ifdef USE_GLES2
 		glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 #else
@@ -301,8 +297,11 @@ void Renderer::Interpolation(const Pipeline &pipeline)
 
 	//glVertexPointer(2, GL_FLOAT, 0, p);
 	//glTexCoordPointer(2, GL_FLOAT, 0, t);
+#ifndef USE_GLES2
 	glInterleavedArrays(GL_T2F_V3F,0,p);
-
+#else
+	// TODO GLES2 glDrawArrays?
+#endif
 
 	if (pipeline.staticPerPixel)
 	{
@@ -362,11 +361,9 @@ Pipeline* Renderer::currentPipe;
 
 Renderer::~Renderer()
 {
-
-	int x;
-
 	if (renderTarget)
 		delete (renderTarget);
+
 	if (textureManager)
 		delete (textureManager);
 
@@ -378,8 +375,10 @@ Renderer::~Renderer()
 	//	std::cerr << "freeing title fonts" << std::endl;
 	if (title_font)
 		delete title_font;
+
 	if (poly_font)
 		delete poly_font;
+
 	if (other_font)
 		delete other_font;
 	//	std::cerr << "freeing title fonts finished" << std::endl;
@@ -415,7 +414,7 @@ void Renderer::reset(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-#ifndef USE_GLES1
+#ifndef USE_GLES2
 	glDrawBuffer(GL_BACK);
 	glReadBuffer(GL_BACK);
 #endif
@@ -428,7 +427,7 @@ void Renderer::reset(int w, int h)
 	glEnable(GL_POINT_SMOOTH);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-#ifndef USE_GLES1
+#ifndef USE_GLES2
 	glLineStipple(2, 0xAAAA);
 #endif
 

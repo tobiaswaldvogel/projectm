@@ -26,8 +26,15 @@
 	#include <Carbon/Carbon.h>
 	#define APIENTRY
 #else
-	#include <GL/gl.h>
-	#include <GL/glx.h>
+	#ifdef USE_GLES2
+		#include <GLES/gl.h>
+		#define GL_CLAMP	GL_CLAMP_TO_EDGE
+
+	#else
+		#include <GL/gl.h>
+		#include <GL/glx.h>
+	#endif
+	#define APIENTRY
 #endif
 
 #include "SOIL.h"
@@ -2010,6 +2017,8 @@ int query_DXT_capability( void )
 				CFRelease( bundleURL );
 				CFRelease( extensionName );
 				CFRelease( bundle );
+			#elif defined(USE_GLES2)
+				// TODO GLES2
 			#else
 				ext_addr = (P_SOIL_GLCOMPRESSEDTEXIMAGE2DPROC)
 						glXGetProcAddressARB

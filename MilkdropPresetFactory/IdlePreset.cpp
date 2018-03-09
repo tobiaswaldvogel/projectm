@@ -6,8 +6,7 @@ const std::string IdlePresets::IDLE_PRESET_NAME
 	("Geiss & Sperl - Feedback (projectM idle HDR mix).milk");
 
 std::string IdlePresets::presetText() {
-
-std::ostringstream out;
+	std::ostringstream out;
 
 out << "[preset00]\n" <<
 "fRating=2.000000\n" <<
@@ -194,16 +193,15 @@ out << "[preset00]\n" <<
 "per_pixel_1=zoom =( log(sqrt(2)-rad) -0.24)*1;\n";
 
 return out.str();
-
 }
 
 std::unique_ptr<Preset> IdlePresets::allocate(const std::string & name, PresetOutputs & presetOutputs)
 {
 
-  if (name == IDLE_PRESET_NAME) {
-  	std::istringstream in(presetText());
-  	return std::unique_ptr<Preset>(new MilkdropPreset(in, IDLE_PRESET_NAME, presetOutputs));
-  }
-  else
-	return std::unique_ptr<Preset>(0);
+	if (name == IDLE_PRESET_NAME) {
+		std::istringstream in(presetText());
+		return std::unique_ptr<Preset>(new MilkdropPreset(in, IDLE_PRESET_NAME, presetOutputs));
+	}
+
+	return std::unique_ptr<Preset>(nullptr);
 }

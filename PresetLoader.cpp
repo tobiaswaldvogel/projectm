@@ -212,10 +212,10 @@ unsigned int PresetLoader::addPresetURL ( const std::string & url, const std::st
 	assert(ratings.size() == TOTAL_RATING_TYPES);
 	assert(ratings.size() == _ratings.size());
 
-	for (int i = 0; i < _ratings.size(); i++)
+	for (size_t i = 0; i < _ratings.size(); i++)
 		_ratings[i].push_back(ratings[i]);
 
-	for (int i = 0; i < ratings.size(); i++)
+	for (size_t i = 0; i < ratings.size(); i++)
 		_ratingsSums[i] += ratings[i];
 	
 	return _entries.size()-1;
