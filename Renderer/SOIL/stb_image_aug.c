@@ -86,6 +86,9 @@
   #endif
 #endif
 
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wmisleading-indentation"
+#endif
 
 // implementation:
 typedef unsigned char uint8;

@@ -10,17 +10,13 @@
 
 #include "Renderable.hpp"
 
-enum MilkdropWaveformMode
-	{
-	  Circle=0, RadialBlob, Blob2, Blob3, DerivativeLine, Blob5, Line, DoubleLine
-	};
-
+enum MilkdropWaveformMode {
+	Circle=0, RadialBlob, Blob2, Blob3, DerivativeLine, Blob5, Line, DoubleLine
+};
 
 class MilkdropWaveform : public RenderItem
 {
 public:
-
-
 	float x;
 	float y;
 
@@ -60,6 +56,5 @@ private:
 	void MaximizeColors(RenderContext &context);
 	void ModulateOpacityByVolume(RenderContext &context);
 	void WaveformMath(RenderContext &context);
-
 };
 #endif /* MILKDROPWAVEFORM_HPP_ */

@@ -8,6 +8,8 @@
 
 #ifdef USE_GLES2
 #include <GLES/gl.h>
+#define glOrtho glOrthof
+#define GL_CLAMP GL_CLAMP_TO_EDGE
 #else
 #ifdef __APPLE__
 #include <OpenGL/gl.h>

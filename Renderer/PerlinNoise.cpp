@@ -49,5 +49,4 @@ PerlinNoise::PerlinNoise()
 
 PerlinNoise::~PerlinNoise()
 {
-	// TODO Auto-generated destructor stub
 }

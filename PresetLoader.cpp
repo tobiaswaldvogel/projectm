@@ -227,7 +227,7 @@ void PresetLoader::removePreset ( unsigned int index )
 	_entries.erase ( _entries.begin() + index );
 	_presetNames.erase ( _presetNames.begin() + index );
 	
-	for (int i = 0; i < _ratingsSums.size(); i++) {
+	for (size_t i = 0; i < _ratingsSums.size(); i++) {
 		_ratingsSums[i] -= _ratings[i][index];
 		_ratings[i].erase ( _ratings[i].begin() + index );
 	}
@@ -270,7 +270,7 @@ void PresetLoader::insertPresetURL ( unsigned int index, const std::string & url
 	
 	
 
-	for (int i = 0; i < _ratingsSums.size();i++) {
+	for (size_t i = 0; i < _ratingsSums.size();i++) {
 		_ratingsSums[i] += _ratings[i][index];
 		_ratings[i].insert ( _ratings[i].begin() + index, ratings[i] );
 	}

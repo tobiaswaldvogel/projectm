@@ -25,8 +25,9 @@
 #include "BeatDetect.hpp"
 
 MilkdropWaveform::MilkdropWaveform(): RenderItem(),
-	x(0.5), y(0.5), r(1), g(0), b(0), a(1), mystery(0), mode(Line), scale(10), smoothing(0), rot(0), samples(0),modOpacityStart(0),modOpacityEnd(1),
-	modulateAlphaByVolume(false), maximizeColors(false), additive(false), dots(false), thick(false), loop(false) {}
+	x(0.5), y(0.5), r(1), g(0), b(0), a(1), mystery(0), mode(Line), additive(false), dots(false), thick(false), 
+	modulateAlphaByVolume(false), maximizeColors(false), scale(10), smoothing(0), 
+	modOpacityStart(0),modOpacityEnd(1), rot(0), samples(0), loop(false) {}
 
 void MilkdropWaveform::Draw(RenderContext &context)
 {
@@ -57,7 +58,6 @@ void MilkdropWaveform::Draw(RenderContext &context)
 		glRotatef(rot, 0, 0, 1);
 		glScalef(aspectScale, 1.0, 1.0);
 		glTranslatef(-.5, -.5, 0);
-
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);

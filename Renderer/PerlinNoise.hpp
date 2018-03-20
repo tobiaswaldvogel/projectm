@@ -32,18 +32,18 @@ private:
 	{
 	    x = (x<<13)^x;
 	    return (((x * (x * x * 15731 + 789221) + 1376312589) & 0x7fffffff) / 2147483648.0);
-	   }
+	}
 
 	static inline float noise(int x, int y)
 	{
 		 int n = x + y * 57;
-		 noise(n);
+		 return noise(n);
 	}
 
 	static inline float noise(int x, int y, int z)
 	{
 		 int n = x + y * 57 + z * 141;
-		 noise(n);
+		 return noise(n);
 	}
 
 	static inline float cos_interp(float a, float b, float x)

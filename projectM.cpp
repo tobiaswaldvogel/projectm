@@ -67,28 +67,27 @@ pthread_mutex_t preset_mutex;
 
 projectM::~projectM()
 {
-
-    #ifdef USE_THREADS
-    std::cout << "[projectM] thread ";
-    printf("c");
-    running = false;
-    printf("l");
-    pthread_cond_signal(&condition);
-    printf("e");
-    pthread_mutex_unlock( &mutex );
-    printf("a");
-    pthread_detach(thread);
-    printf("n");
-    pthread_cond_destroy(&condition);
-    printf("u");
-    pthread_mutex_destroy( &mutex );
-    #ifdef SYNC_PRESET_SWITCHES
+#ifdef USE_THREADS
+	std::cout << "[projectM] thread ";
+	printf("c");
+	running = false;
+	printf("l");
+	pthread_cond_signal(&condition);
+	printf("e");
+	pthread_mutex_unlock( &mutex );
+	printf("a");
+	pthread_detach(thread);
+	printf("n");
+	pthread_cond_destroy(&condition);
+	printf("u");
+	pthread_mutex_destroy( &mutex );
+#ifdef SYNC_PRESET_SWITCHES
     pthread_mutex_destroy( &preset_mutex );
-    #endif
+#endif
 
     printf("p");
     std::cout << std::endl;
-    #endif
+#endif
     destroyPresetTools();
 
     if ( renderer )
@@ -114,27 +113,24 @@ void projectM::projectM_resetTextures()
     renderer->ResetTextures();
 }
 
-
 projectM::projectM ( std::string config_file, int flags) :
-beatDetect ( 0 ), renderer ( 0 ),  _pcm(0), m_presetPos(0), m_flags(flags), _pipelineContext(new PipelineContext()), _pipelineContext2(new PipelineContext())
+_pcm(0), beatDetect(0), renderer (0), _pipelineContext(new PipelineContext()), _pipelineContext2(new PipelineContext()), m_presetPos(0), m_flags(flags)
 {
-    readConfig(config_file);
-    projectM_reset();
-    projectM_resetGL(_settings.windowWidth, _settings.windowHeight);
-
+	readConfig(config_file);
+	projectM_reset();
+	projectM_resetGL(_settings.windowWidth, _settings.windowHeight);
 }
 
 projectM::projectM(Settings settings, int flags):
-beatDetect ( 0 ), renderer ( 0 ),  _pcm(0), m_presetPos(0), m_flags(flags), _pipelineContext(new PipelineContext()), _pipelineContext2(new PipelineContext())
+_pcm(0), beatDetect(0), renderer (0), _pipelineContext(new PipelineContext()), _pipelineContext2(new PipelineContext()), m_presetPos(0), m_flags(flags)
 {
     readSettings(settings);
     projectM_reset();
     projectM_resetGL(_settings.windowWidth, _settings.windowHeight);
 }
 
-
-bool projectM::writeConfig(const std::string & configFile, const Settings & settings) {
-
+bool projectM::writeConfig(const std::string & configFile, const Settings & settings)
+{
     ConfigFile config ( configFile );
 
     config.add("Mesh X", settings.meshX);
@@ -154,11 +150,12 @@ bool projectM::writeConfig(const std::string & configFile, const Settings & sett
     config.add("Shuffle Enabled", settings.shuffleEnabled);
     config.add("Soft Cut Ratings Enabled", settings.softCutRatingsEnabled);
     std::fstream file(configFile.c_str());
-    if (file) {
-        file << config;
-        return true;
-    } else
-        return false;
+	
+	if (!file)
+		return false;
+		
+	file << config;
+	return true;
 }
 
 

@@ -43,7 +43,6 @@ Renderer::Renderer(int width, int height, int gx, int gy, int texsize, BeatDetec
 
 #ifdef USE_FTGL
 	/**f Load the standard fonts */
-
 	title_font = new FTGLPixmapFont(title_fontURL.c_str());
 	other_font = new FTGLPixmapFont(menu_fontURL.c_str());
 	other_font->UseDisplayList(true);
@@ -58,18 +57,13 @@ Renderer::Renderer(int width, int height, int gx, int gy, int texsize, BeatDetec
 	poly_font->UseDisplayList(true);
 #endif /** USE_FTGL */
 
-
 	int size = (mesh.height - 1) *mesh.width * 5 * 2;
-	p = ( float * ) wipemalloc ( size * sizeof ( float ) );
+	p = (float*)wipemalloc(size * sizeof(float));
 
-
-	for (int j = 0; j < mesh.height - 1; j++)
-	{
+	for (int j = 0; j < mesh.height - 1; j++) {
 		int base = j * mesh.width * 2 * 5;
 
-
-		for (int i = 0; i < mesh.width; i++)
-		{
+		for (int i = 0; i < mesh.width; i++) {
 			int index = j * mesh.width + i;
 			int index2 = (j + 1) * mesh.width + i;
 
@@ -88,7 +82,6 @@ Renderer::Renderer(int width, int height, int gx, int gy, int texsize, BeatDetec
 #ifdef USE_CG
 	shaderEngine.setParams(renderTarget->texsize, renderTarget->textureID[1], aspect, beatDetect, textureManager);
 #endif
-
 }
 
 void Renderer::SetPipeline(Pipeline &pipeline)
@@ -132,13 +125,7 @@ void Renderer::SetupPass1(const Pipeline &pipeline, const PipelineContext &pipel
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-
-#ifdef USE_GLES2
-	glOrthof(0.0, 1, 0.0, 1, -40, 40);
-#else
 	glOrtho(0.0, 1, 0.0, 1, -40, 40);
-#endif
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -157,12 +144,8 @@ void Renderer::RenderItems(const Pipeline &pipeline, const PipelineContext &pipe
 	renderContext.beatDetect = beatDetect;
 
 	for (std::vector<RenderItem*>::const_iterator pos = pipeline.drawables.begin(); pos != pipeline.drawables.end(); ++pos)
-    {
-      if (*pos != NULL)
-      {
-		(*pos)->Draw(renderContext);
-      }
-    }
+		if (*pos != NULL)
+			(*pos)->Draw(renderContext);
 }
 
 void Renderer::FinishPass1()
@@ -202,11 +185,7 @@ void Renderer::Pass2(const Pipeline &pipeline, const PipelineContext &pipelineCo
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-#ifdef USE_GLES2
-	glOrthof(-0.5, 0.5, -0.5, 0.5, -40, 40);
-#else
 	glOrtho(-0.5, 0.5, -0.5, 0.5, -40, 40);
-#endif
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glLineWidth(this->renderTarget->texsize < 512 ? 1 : this->renderTarget->texsize / 512.0);
@@ -220,16 +199,22 @@ void Renderer::Pass2(const Pipeline &pipeline, const PipelineContext &pipelineCo
 	// When console refreshes, there is a chance the preset has been changed by the user
 	refreshConsole();
 	draw_title_to_screen(false);
+
 	if (this->showhelp % 2)
 		draw_help();
+
 	if (this->showtitle % 2)
 		draw_title();
+
 	if (this->showfps % 2)
 		draw_fps(this->realfps);
+
 	if (this->showpreset % 2)
 		draw_preset();
+
 	if (this->showstats % 2)
 		draw_stats();
+
 	glTranslatef(0.5, 0.5, 0);
 
 #ifdef USE_FBO
@@ -264,18 +249,10 @@ void Renderer::Interpolation(const Pipeline &pipeline)
 		glBindTexture(GL_TEXTURE_2D, renderTarget->textureID[0]);
 
 	//Texture wrapping( clamp vs. wrap)
-	if (pipeline.textureWrap == 0)
-	{
-#ifdef USE_GLES2
-		glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-#else
+	if (pipeline.textureWrap == 0) {
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-#endif
-	}
-	else
-	{
+	} else {
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
@@ -303,14 +280,11 @@ void Renderer::Interpolation(const Pipeline &pipeline)
 	// TODO GLES2 glDrawArrays?
 #endif
 
-	if (pipeline.staticPerPixel)
-	{
-		for (int j = 0; j < mesh.height - 1; j++)
-		{
+	if (pipeline.staticPerPixel) {
+		for (int j = 0; j < mesh.height - 1; j++) {
 			int base = j * mesh.width * 2 * 5;
 
-			for (int i = 0; i < mesh.width; i++)
-			{
+			for (int i = 0; i < mesh.width; i++) {
 				int strip = base + i * 10;
 				p[strip] = pipeline.x_mesh[i][j];
 				p[strip + 1] = pipeline.y_mesh[i][j];
@@ -319,33 +293,25 @@ void Renderer::Interpolation(const Pipeline &pipeline)
 				p[strip + 6] = pipeline.y_mesh[i][j+1];
 			}
 		}
-
-	}
-	else
-	{
+	} else {
 		mesh.Reset();
 		omptl::transform(mesh.p.begin(), mesh.p.end(), mesh.identity.begin(), mesh.p.begin(), &Renderer::PerPixel);
 
-	for (int j = 0; j < mesh.height - 1; j++)
-	{
-		int base = j * mesh.width * 2 * 5;
+		for (int j = 0; j < mesh.height - 1; j++) {
+			int base = j * mesh.width * 2 * 5;
 
-		for (int i = 0; i < mesh.width; i++)
-		{
-			int strip = base + i * 10;
-			int index = j * mesh.width + i;
-			int index2 = (j + 1) * mesh.width + i;
+			for (int i = 0; i < mesh.width; i++) {
+				int strip = base + i * 10;
+				int index = j * mesh.width + i;
+				int index2 = (j + 1) * mesh.width + i;
 
-			p[strip] = mesh.p[index].x;
-			p[strip + 1] = mesh.p[index].y;
+				p[strip] = mesh.p[index].x;
+				p[strip + 1] = mesh.p[index].y;
 
-			p[strip + 5] = mesh.p[index2].x;
-			p[strip + 6] = mesh.p[index2].y;
-
-
+				p[strip + 5] = mesh.p[index2].x;
+				p[strip + 6] = mesh.p[index2].y;
+			}
 		}
-	}
-
 	}
 
 	for (int j = 0; j < mesh.height - 1; j++)
@@ -441,9 +407,7 @@ void Renderer::reset(int w, int h)
 	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
 	if (!this->renderTarget->useFBO)
-	{
 		this->renderTarget->fallbackRescale(w, h);
-	}
 }
 
 GLuint Renderer::initRenderToTexture()
@@ -716,7 +680,6 @@ void Renderer::draw_fps(float realfps)
 
 void Renderer::CompositeOutput(const Pipeline &pipeline, const PipelineContext &pipelineContext)
 {
-
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
 
@@ -768,6 +731,4 @@ void Renderer::CompositeOutput(const Pipeline &pipeline, const PipelineContext &
 	for (std::vector<RenderItem*>::const_iterator pos = pipeline.compositeDrawables.begin(); pos
 			!= pipeline.compositeDrawables.end(); ++pos)
 		(*pos)->Draw(renderContext);
-
 }
-

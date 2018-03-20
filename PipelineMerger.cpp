@@ -6,9 +6,7 @@ const double PipelineMerger::e(2.71828182845904523536);
 const double PipelineMerger::s(0.5);
 
 void PipelineMerger::mergePipelines(const Pipeline & a, const Pipeline & b, Pipeline & out, RenderItemMatcher::MatchResults & results, RenderItemMergeFunction & mergeFunction, float ratio)
-
 {
-
 	const double x = ( ratio - 0.5 ) * 20;
 	const double sigmoid = 1.0 / ( 1.0 + e - s * x );
 	const double invratio = 1.0 - ratio;
@@ -34,8 +32,7 @@ void PipelineMerger::mergePipelines(const Pipeline & a, const Pipeline & b, Pipe
 		out.drawables.push_back ( *pos );
 	}
 
-    if(ratio < 0.5)
-    {
+    if (ratio < 0.5) {
         const double local_ratio = (invratio - 0.5) * 2;
 
         for (std::vector<RenderItem*>::const_iterator pos = a.compositeDrawables.begin();
@@ -44,9 +41,7 @@ void PipelineMerger::mergePipelines(const Pipeline & a, const Pipeline & b, Pipe
             (*pos)->masterAlpha = local_ratio;
             out.compositeDrawables.push_back(*pos);
         }
-    }
-    else
-    {
+    } else {
         const double local_ratio = (ratio - 0.5) * 2;
 
         for (std::vector<RenderItem*>::const_iterator pos = b.compositeDrawables.begin();
